@@ -1,0 +1,6 @@
+{
+    "service": "as2",
+    "messageId": 876512739112345,
+    "eventType": "MESSAGE.SEND.INCOMPLETE",
+    "sentAt": 1665488074723
+}

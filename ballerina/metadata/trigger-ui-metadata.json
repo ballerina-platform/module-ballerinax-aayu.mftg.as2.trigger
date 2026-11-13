@@ -1,0 +1,258 @@
+{
+  "version": "v1.0",
+  "metadata": {
+    "kind": "event"
+  },
+  "trigger": {
+    "displayName": "Aayu MFTG AS2 Event Integration",
+    "description": "Create a service to handle webhook events from Aayu MFTG AS2",
+    "type": "aayu"
+  },
+  "initForm": {
+    "fields": [
+      {
+        "target": {
+          "kind": "recordField",
+          "owner": "trigger.initProperties",
+          "path": "serviceType"
+        },
+        "metadata": {
+          "label": "Event Channel",
+          "description": "The type of MFT Gateway AS2 event to listen for"
+        },
+        "source": {
+          "construct": {
+            "kind": "SERVICE_TYPE_DESCRIPTOR"
+          },
+          "module": {
+            "name": "aayu"
+          }
+        },
+        "state": {
+          "enabled": true,
+          "editable": true,
+          "optional": false,
+          "advanced": false
+        },
+        "key": "serviceType",
+        "default": "aayu:ReceivedMessageService"
+      }
+    ]
+  },
+  "listeners": [
+    {
+      "target": "$listener",
+      "form": {
+        "section": {
+          "label": "Listener",
+          "description": "Attach the service to a new or existing Aayu MFTG AS2 webhook listener."
+        },
+        "createNew": {
+          "label": "Create New Listener",
+          "description": "Define a new Aayu MFTG AS2 webhook listener in the project."
+        },
+        "listenerConfig": {
+          "label": "Listener Configurations",
+          "description": "Configure the Aayu MFTG AS2 webhook listener."
+        },
+        "useExisting": {
+          "label": "Use Existing Listener",
+          "description": "Attach to a Aayu MFTG AS2 listener already declared in the project."
+        },
+        "existingListener": {
+          "label": "Listener",
+          "description": "Select an existing listener to attach the service to."
+        },
+        "existingListenerItems": [
+          "aayuListener"
+        ],
+        "existingListenerValue": "aayuListener"
+      },
+      "formFields": {
+        "listenerVarName": {
+          "key": "listenerVarName",
+          "default": "aayuListener",
+          "metadata": {
+            "label": "Listener Name",
+            "description": "Provide a name for the listener being created"
+          },
+          "source": {
+            "construct": {
+              "kind": "LISTENER_VAR_NAME"
+            }
+          },
+          "state": {
+            "enabled": true,
+            "editable": true,
+            "optional": false,
+            "advanced": false
+          }
+        },
+        "listenOn": {
+          "key": "listenOn",
+          "placeholder": "8090",
+          "default": "8090",
+          "metadata": {
+            "label": "Webhook Listener Port",
+            "description": "The port on which the webhook listener accepts incoming HTTP requests"
+          },
+          "source": {
+            "argument": {
+              "kind": "LISTENER_PARAM_REQUIRED",
+              "position": 2,
+              "originalName": "listenOn"
+            }
+          },
+          "state": {
+            "enabled": true,
+            "editable": true,
+            "optional": true,
+            "advanced": false
+          }
+        },
+        "listenerConfigFallback": {
+          "key": "listenerConfigFallback",
+          "default": "{}",
+          "metadata": {
+            "label": "Listener Config",
+            "description": "Fallback empty value for the listener config record when no fields under it are set."
+          },
+          "source": {
+            "argument": {
+              "kind": "LISTENER_PARAM_REQUIRED",
+              "position": 1,
+              "originalName": "listenerConfig"
+            }
+          },
+          "state": {
+            "enabled": true,
+            "editable": false,
+            "optional": true,
+            "advanced": true,
+            "hidden": true
+          }
+        },
+        "webhookSecret": {
+          "key": "webhookSecret",
+          "placeholder": "",
+          "default": "",
+          "metadata": {
+            "label": "Webhook Public Key",
+            "description": "Public key downloaded from MFT Gateway's webhook settings, used to validate incoming MFT Gateway events"
+          },
+          "source": {
+            "argument": {
+              "kind": "LISTENER_PARAM_CONFIG_FIELD",
+              "originalName": "webhookSecret",
+              "position": 1
+            },
+            "path": "webhookSecret"
+          },
+          "state": {
+            "enabled": true,
+            "editable": true,
+            "optional": true,
+            "advanced": false
+          }
+        }
+      }
+    }
+  ],
+  "serviceTypes": [
+    {
+      "target": "$receivedMessage",
+      "metadata": {
+        "label": "Received Message",
+        "description": "Triggered when an event related to Aayu MFTG AS2 received message is received. Available actions: onMessageReceivedSuccess."
+      },
+      "source": {
+        "construct": {
+          "kind": "SERVICE_TYPE_DESCRIPTOR"
+        },
+        "argument": {
+          "originalName": "ReceivedMessageService"
+        },
+        "module": {
+          "name": "aayu"
+        }
+      },
+      "state": {
+        "enabled": true,
+        "editable": true
+      }
+    },
+    {
+      "target": "$sentMessage",
+      "metadata": {
+        "label": "Sent Message",
+        "description": "Triggered when an event related to Aayu MFTG AS2 sent message is received. Available actions: onMessageSendSuccess."
+      },
+      "source": {
+        "construct": {
+          "kind": "SERVICE_TYPE_DESCRIPTOR"
+        },
+        "argument": {
+          "originalName": "SentMessageService"
+        },
+        "module": {
+          "name": "aayu"
+        }
+      },
+      "state": {
+        "enabled": false,
+        "editable": true
+      }
+    },
+    {
+      "target": "$failedMessage",
+      "metadata": {
+        "label": "Failed Message",
+        "description": "Triggered when an event related to Aayu MFTG AS2 failed message is received. Available actions: onMessageSendFailed."
+      },
+      "source": {
+        "construct": {
+          "kind": "SERVICE_TYPE_DESCRIPTOR"
+        },
+        "argument": {
+          "originalName": "FailedMessageService"
+        },
+        "module": {
+          "name": "aayu"
+        }
+      },
+      "state": {
+        "enabled": false,
+        "editable": true
+      }
+    },
+    {
+      "target": "$incompleteMessage",
+      "metadata": {
+        "label": "Incomplete Message",
+        "description": "Triggered when an event related to Aayu MFTG AS2 incomplete message is received. Available actions: onMessageSendIncomplete."
+      },
+      "source": {
+        "construct": {
+          "kind": "SERVICE_TYPE_DESCRIPTOR"
+        },
+        "argument": {
+          "originalName": "IncompleteMessageService"
+        },
+        "module": {
+          "name": "aayu"
+        }
+      },
+      "state": {
+        "enabled": false,
+        "editable": true
+      }
+    }
+  ],
+  "artifactInfo": {
+    "displayLabel": "Aayu MFTG AS2 Event Integration",
+    "icon": {
+      "lightPath": "icons/light.svg",
+      "darkPath": "icons/dark.svg"
+    }
+  }
+}

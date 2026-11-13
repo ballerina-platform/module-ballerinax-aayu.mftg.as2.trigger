@@ -1,0 +1,8 @@
+{
+    "service": "as2",
+    "messageId": 872001422112345,
+    "eventType": "MESSAGE.SEND.FAILED",
+    "failureReason": "Cannot resolve partner hostname",
+    "failures": 1,
+    "lastAttemptTime": 1665036942928
+}

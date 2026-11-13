@@ -1,0 +1,5 @@
+[package]
+org = "ballerina_example"
+name = "as2_audit_trail"
+version = "0.1.0"
+distribution = "2201.13.0"

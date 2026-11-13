@@ -1,0 +1,19 @@
+{
+    "service": "as2",
+    "to": "sample+1@email.com",
+    "messageId": 871999751123456,
+    "messageIdentifier": "<467855488300248@mftgateway.com>",
+    "messageSubject": "Test Receive message",
+    "timestamp": 1665036775506,
+    "partnerIdentifier": "mypartnerid",
+    "partnerName": "Partner Name",
+    "stationIdentifier": "mystationid",
+    "stationName": "Station Name",
+    "attachments": ["AS2/files/mystationid/mypartnerid/inbox/..."],
+    "bucketName": "mftg-bucketname.test.mftgateway.com",
+    "tenantName": "abc.test.mftgateway.com",
+    "tenantId": 301713382762123,
+    "tenantEmail": "tenant@email.com",
+    "receivedAt": 1665036775506,
+    "eventType": "MESSAGE.RECEIVED.SUCCESS"
+}

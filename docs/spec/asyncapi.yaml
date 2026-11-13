@@ -1,0 +1,373 @@
+asyncapi: 3.0.0
+x-ballerina-event-identifier:
+  type: "body"
+  path: "eventType"
+x-ballerina-auth:
+  header: "mftg-wh-signature"
+  signature:
+    strategy: "rsa"
+    algorithm: "sha256"
+    encoding: "base64"
+    headerFormat: "$signature"
+    input: "$sortedJsonBody"
+info:
+  title: Aayu MFTG Events API
+  version: 1.0.0
+  description: Webhook notifications for selected event types on MFTG by Aayu technologies
+  termsOfService: 'https://aayutechnologies.com/terms/'
+  contact:
+    name: MFT Gateway Support
+    url: 'https://mftgateway.com/contact/'
+  externalDocs:
+    description: MFT Gateway API documentation
+    url: 'https://aayutechnologies.com/docs/product/mft-gateway/integrations/webhook-integration/'
+defaultContentType: application/json
+# One channel per event, so the service types and remote functions keep the names of the trigger.aayu.mftg.as2
+# package this replaces (ReceivedMessageService.onMessageReceivedSuccess and so on).
+channels:
+  receivedMessage:
+    address: /
+    messages:
+      receivedMessage:
+        x-ballerina-event-type: "MESSAGE.RECEIVED.SUCCESS"
+        x-ballerina-event-label: MessageReceivedSuccess
+        payload:
+          $ref: '#/components/schemas/MessageReceivedEvent'
+        summary: Message received event.
+  sentMessage:
+    address: /
+    messages:
+      sentMessage:
+        x-ballerina-event-type: "MESSAGE.SEND.SUCCESS"
+        x-ballerina-event-label: MessageSendSuccess
+        payload:
+          $ref: '#/components/schemas/MessageSentEvent'
+        summary: Message sent event.
+  failedMessage:
+    address: /
+    messages:
+      failedMessage:
+        x-ballerina-event-type: "MESSAGE.SEND.FAILED"
+        x-ballerina-event-label: MessageSendFailed
+        payload:
+          $ref: '#/components/schemas/MessageFailedEvent'
+        summary: Message failed event.
+  incompleteMessage:
+    address: /
+    messages:
+      incompleteMessage:
+        x-ballerina-event-type: "MESSAGE.SEND.INCOMPLETE"
+        x-ballerina-event-label: MessageSendIncomplete
+        payload:
+          $ref: '#/components/schemas/MessageIncompleteEvent'
+        summary: Outgoing message incomplete event.
+operations:
+  receivedMessage:
+    action: receive
+    channel:
+      $ref: "#/channels/receivedMessage"
+    messages:
+      - $ref: "#/channels/receivedMessage/messages/receivedMessage"
+  sentMessage:
+    action: receive
+    channel:
+      $ref: "#/channels/sentMessage"
+    messages:
+      - $ref: "#/channels/sentMessage/messages/sentMessage"
+  failedMessage:
+    action: receive
+    channel:
+      $ref: "#/channels/failedMessage"
+    messages:
+      - $ref: "#/channels/failedMessage/messages/failedMessage"
+  incompleteMessage:
+    action: receive
+    channel:
+      $ref: "#/channels/incompleteMessage"
+    messages:
+      - $ref: "#/channels/incompleteMessage/messages/incompleteMessage"
+components:
+  schemas:
+    MessageReceivedEvent:
+      additionalProperties: true
+      externalDocs:
+        description: 'Event documentation received message'
+        url: 'https://aayutechnologies.com/docs/product/mft-gateway/integrations/webhook-integration/'
+      required:
+        - service
+        - to
+        - messageId
+        - messageIdentifier
+        - messageSubject
+        - timestamp
+        - partnerIdentifier
+        - partnerName
+        - stationIdentifier
+        - stationName
+        - bucketName
+        - tenantName
+        - tenantId
+        - tenantEmail
+        - eventType
+        - receivedAt
+      properties:
+        service:
+          type: string
+          description: Service the event came from (as2 or sftp).
+        to:
+          type: string
+          description: Email address of the receiving party.
+        messageId:
+          type: integer
+          description: Numeric identifier of the message.
+        messageIdentifier:
+          type: string
+          description: AS2 message identifier of the message.
+        messageSubject:
+          type: string
+          description: Subject of the message.
+        timestamp:
+          type: integer
+          description: Epoch milliseconds at which the event was created.
+        partnerIdentifier:
+          type: string
+          description: Identifier of the Partner.
+        partnerName:
+          type: string
+          description: Name of the Partner.
+        stationIdentifier:
+          type: string
+          description: Identifier of the Station.
+        stationName:
+          type: string
+          description: Name of the Station.
+        attachments:
+          type: array
+          items:
+            type: string
+          description: Paths of the message attachments.
+        bucketName:
+          type: string
+          description: Name of the bucket the message files are stored in.
+        tenantName:
+          type: string
+          description: Name of the tenant.
+        tenantId:
+          type: integer
+          description: ID of the tenant.
+        tenantEmail:
+          type: string
+          description: Email associated with the tenant.
+        eventType:
+          type: string
+          description: Event type.
+        receivedAt:
+          type: integer
+          description: Epoch milliseconds at which the message was received.
+    MessageSentEvent:
+      additionalProperties: true
+      externalDocs:
+        description: 'Event documentation sent message'
+        url: 'https://aayutechnologies.com/docs/product/mft-gateway/integrations/webhook-integration/'
+      required:
+        - service
+        - eventType
+        - messageId
+        - sentAt
+      properties:
+        service:
+          type: string
+          description: Service the event came from (as2 or sftp).
+        to:
+          type: string
+          description: Email address of the receiving party.
+        messageId:
+          type: integer
+          description: Numeric identifier of the message.
+        messageIdentifier:
+          type: string
+          description: AS2 message identifier of the message.
+        messageSubject:
+          type: string
+          description: Subject of the message.
+        timestamp:
+          type: integer
+          description: Epoch milliseconds at which the event was created.
+        partnerIdentifier:
+          type: string
+          description: Identifier of the Partner.
+        partnerName:
+          type: string
+          description: Name of the Partner.
+        stationIdentifier:
+          type: string
+          description: Identifier of the Station.
+        stationName:
+          type: string
+          description: Name of the Station.
+        attachments:
+          type: array
+          items:
+            type: string
+          description: Paths of the message attachments.
+        bucketName:
+          type: string
+          description: Name of the bucket the message files are stored in.
+        tenantName:
+          type: string
+          description: Name of the tenant.
+        tenantId:
+          type: integer
+          description: ID of the tenant.
+        tenantEmail:
+          type: string
+          description: Email associated with the tenant.
+        eventType:
+          type: string
+          description: Event type.
+        sentAt:
+          type: integer
+          description: Epoch milliseconds at which the message was sent.
+        failureReason:
+          type: string
+          nullable: true
+          description: Always null for a sent message.
+    MessageFailedEvent:
+      additionalProperties: true
+      externalDocs:
+        description: 'Event documentation send failure'
+        url: 'https://aayutechnologies.com/docs/product/mft-gateway/integrations/webhook-integration/'
+      required:
+        - service
+        - messageId
+        - eventType
+        - failureReason
+        - failures
+        - lastAttemptTime
+      properties:
+        service:
+          type: string
+          description: Service the event came from (as2 or sftp).
+        to:
+          type: string
+          description: Email address of the receiving party.
+        messageId:
+          type: integer
+          description: Numeric identifier of the message.
+        messageIdentifier:
+          type: string
+          description: AS2 message identifier of the message.
+        messageSubject:
+          type: string
+          description: Subject of the message.
+        timestamp:
+          type: integer
+          description: Epoch milliseconds at which the event was created.
+        partnerIdentifier:
+          type: string
+          description: Identifier of the Partner.
+        partnerName:
+          type: string
+          description: Name of the Partner.
+        stationIdentifier:
+          type: string
+          description: Identifier of the Station.
+        stationName:
+          type: string
+          description: Name of the Station.
+        attachments:
+          type: array
+          items:
+            type: string
+          description: Paths of the message attachments.
+        bucketName:
+          type: string
+          description: Name of the bucket the message files are stored in.
+        tenantName:
+          type: string
+          description: Name of the tenant.
+        tenantId:
+          type: integer
+          description: ID of the tenant.
+        tenantEmail:
+          type: string
+          description: Email associated with the tenant.
+        eventType:
+          type: string
+          description: Event type.
+        failureReason:
+          type: string
+          description: Reason the send failed.
+        failures:
+          type: integer
+          description: Number of failed attempts.
+        lastAttemptTime:
+          type: integer
+          description: Epoch milliseconds of the last failed attempt.
+        sentAt:
+          type: integer
+          description: Epoch milliseconds at which the send was first attempted.
+    MessageIncompleteEvent:
+      additionalProperties: true
+      externalDocs:
+        description: 'Event documentation incomplete outgoing message'
+        url: 'https://aayutechnologies.com/docs/product/mft-gateway/integrations/webhook-integration/'
+      required:
+        - service
+        - messageId
+        - eventType
+        - sentAt
+      properties:
+        service:
+          type: string
+          description: Service the event came from (as2 or sftp).
+        to:
+          type: string
+          description: Email address of the receiving party.
+        messageId:
+          type: integer
+          description: Numeric identifier of the message.
+        messageIdentifier:
+          type: string
+          description: AS2 message identifier of the message.
+        messageSubject:
+          type: string
+          description: Subject of the message.
+        timestamp:
+          type: integer
+          description: Epoch milliseconds at which the event was created.
+        partnerIdentifier:
+          type: string
+          description: Identifier of the Partner.
+        partnerName:
+          type: string
+          description: Name of the Partner.
+        stationIdentifier:
+          type: string
+          description: Identifier of the Station.
+        stationName:
+          type: string
+          description: Name of the Station.
+        attachments:
+          type: array
+          items:
+            type: string
+          description: Paths of the message attachments.
+        bucketName:
+          type: string
+          description: Name of the bucket the message files are stored in.
+        tenantName:
+          type: string
+          description: Name of the tenant.
+        tenantId:
+          type: integer
+          description: ID of the tenant.
+        tenantEmail:
+          type: string
+          description: Email associated with the tenant.
+        eventType:
+          type: string
+          description: Event type.
+        sentAt:
+          type: integer
+          description: Epoch milliseconds at which the outgoing message was recorded.

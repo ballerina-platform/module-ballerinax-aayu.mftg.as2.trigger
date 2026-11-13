@@ -1,0 +1,7 @@
+{
+    "service": "as2",
+    "eventType": "MESSAGE.SEND.SUCCESS",
+    "messageId": 871999751123456,
+    "sentAt": 1665036775506,
+    "failureReason": null
+}

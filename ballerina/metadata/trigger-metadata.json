@@ -1,0 +1,70 @@
+{
+  "version": "v1.0",
+  "listeners": [
+    {
+      "id": "$listener",
+      "doc": "Webhook listener that dispatches each inbound Aayu MFTG AS2 webhook event to the concrete service type matching its event family.",
+      "type": {
+        "name": "Listener"
+      },
+      "services": [
+        "$receivedMessage",
+        "$sentMessage",
+        "$failedMessage",
+        "$incompleteMessage"
+      ],
+      "multipleServicesAllowed": true,
+      "multipleServicesOfSameTypeAllowed": false
+    }
+  ],
+  "serviceTypes": [
+    {
+      "id": "$receivedMessage",
+      "doc": "Receives MFT Gateway AS2 message received events (MESSAGE.RECEIVED.SUCCESS).",
+      "type": {
+        "name": "ReceivedMessageService"
+      },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": {
+        "backedByConcreteType": true
+      }
+    },
+    {
+      "id": "$sentMessage",
+      "doc": "Receives MFT Gateway AS2 message sent events (MESSAGE.SEND.SUCCESS).",
+      "type": {
+        "name": "SentMessageService"
+      },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": {
+        "backedByConcreteType": true
+      }
+    },
+    {
+      "id": "$failedMessage",
+      "doc": "Receives MFT Gateway AS2 message send failed events (MESSAGE.SEND.FAILED).",
+      "type": {
+        "name": "FailedMessageService"
+      },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": {
+        "backedByConcreteType": true
+      }
+    },
+    {
+      "id": "$incompleteMessage",
+      "doc": "Receives MFT Gateway AS2 message send incomplete events (MESSAGE.SEND.INCOMPLETE).",
+      "type": {
+        "name": "IncompleteMessageService"
+      },
+      "concrete": true,
+      "multipleListenersAllowed": true,
+      "handlers": {
+        "backedByConcreteType": true
+      }
+    }
+  ]
+}

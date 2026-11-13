@@ -1,0 +1,11 @@
+[package]
+distribution = "2201.13.0"
+org = "ballerinax"
+name = "aayu.mftg.as2.trigger"
+version = "1.0.0"
+license = ["Apache-2.0"]
+authors = ["Ballerina"]
+keywords = ["Name/Aayu MFTG AS2 Trigger", "Area/Cloud & Infrastructure", "Vendor/Aayu", "Cost/Paid", "Type/Trigger"]
+icon = "icon.png"
+repository = "https://github.com/ballerina-platform/module-ballerinax-aayu.mftg.as2.trigger"
+include = ["metadata/**"]
